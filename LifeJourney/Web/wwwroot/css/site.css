@@ -1,30 +1,31 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    /*background: #2C3E50;*/
 }
 
 .main-box {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     padding: 10px;
-    background: #2C3E50;
+    background: #1C2833;
 }
 
 .header-box {
@@ -76,13 +77,14 @@ body::-webkit-scrollbar {
 
 .form-control:focus {
     box-shadow: none !important;
-    border: 1px solid #2ECC71  !important
+    border: 1px solid #2ECC71 !important
 }
-a{
+
+a {
     text-decoration: none !important
 }
 
-.btn:active{
+.btn:active {
     box-shadow: none !important;
 }
 
