@@ -6,35 +6,41 @@ namespace BL.Services
 {
     public interface IChatBotService
     {
-        Task<string> CompleteSentence(string text);
+        Task<string> CompleteSentence(string _baseUrl, string text);
     }
     public class ChatBotService : IChatBotService
     {
         // Testing purpose 
-        string _baseUrl = "http://127.0.0.1:8000/chat";
-        public async Task<string> CompleteSentence(string message)
+        public async Task<string> CompleteSentence(string _baseUrl, string message)
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri(_baseUrl);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var messageModel = new { text = message };
-                var messageJson = JsonConvert.SerializeObject(messageModel);
-                var content = new StringContent(messageJson, Encoding.UTF8, "application/json");
-
-                var response = await client.PostAsync("/chat", content);
-
-                if (response.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    var responseJson = await response.Content.ReadAsStringAsync();
-                    var responseModel = JsonConvert.DeserializeObject<ChatbotResponse>(responseJson);
-                    return responseModel.message;
+                    client.BaseAddress = new Uri(_baseUrl);
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var messageModel = new { text = message };
+                    var messageJson = JsonConvert.SerializeObject(messageModel);
+                    var content = new StringContent(messageJson, Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync("/chat", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseJson = await response.Content.ReadAsStringAsync();
+                        var responseModel = JsonConvert.DeserializeObject<ChatbotResponse>(responseJson);
+                        return responseModel.message;
+                    }
+                    else
+                    {
+                        return "Please wait, will get back to you :)";
+                    }
                 }
-                else
-                {
-                    throw new Exception($"Error sending message: {response.StatusCode}");
-                }
+            }
+            catch (Exception)
+            {
+                return "Please wait, will get back to you :)";
             }
         }
     }

@@ -15,16 +15,19 @@ namespace Web.Hubs
         private readonly static Dictionary<int, string> _ConnectionsMap = new Dictionary<int, string>();
         private readonly ApplicationDBContext _context;
         private readonly IMessageRepo _messageRepo;
+        private readonly IConfiguration _config;
         private readonly StateHelper _stateHelper;
         private readonly IChatBotService _chatbot;
 
         public ChatHub(ApplicationDBContext context, StateHelper stateHelper, IChatBotService chatbot,
-            IMessageRepo messageRepo)
+            IMessageRepo messageRepo,
+            IConfiguration config)
         {
             _context = context;
             _stateHelper = stateHelper;
             _chatbot = chatbot;
             _messageRepo = messageRepo;
+            _config = config;
         }
 
         public async Task SendPrivate(int userId, string message)
@@ -49,8 +52,7 @@ namespace Web.Hubs
                         Text = message,
                     }));
 
-                    var response = await _chatbot.CompleteSentence(message);
-                    //var response = "Please wait, will get back to you :)";
+                    var response = await _chatbot.CompleteSentence(_config.GetSection("Chatbot:url").Value, message);
 
                     await _messageRepo.Add(user);
                     if (!string.IsNullOrEmpty(response))
