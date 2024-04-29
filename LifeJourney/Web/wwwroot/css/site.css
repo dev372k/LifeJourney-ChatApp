@@ -1,0 +1,123 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.main-box {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    padding: 10px;
+    background: #2C3E50;
+}
+
+.header-box {
+    background: grey;
+}
+
+.box {
+    height: 500px;
+    max-height: 1000px;
+    overflow-y: auto;
+    position: relative; /* Added position relative */
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+    scrollbar-width: none; /* Firefox (since version 64) */
+}
+
+/* Hide scrollbar for Webkit-based browsers */
+body::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+/*.chat-user {
+    padding: 1px 5px;
+    margin: 10px 0px;
+    width: 25%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    color: white;
+    background: grey;
+    border-radius: 0px 10px 10px 10px
+}
+
+.chat-bot {
+    padding: 1px 5px;
+    margin: 10px 0px;
+    background: #2ECC71;
+    width: 25%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    color: white;
+    border-radius: 0px 10px 10px 10px
+}*/
+
+.name-badge {
+    border-radius: 50%;
+    background: #2ECC71;
+    color: white;
+    font-weight: bold;
+    object-fit: contain;
+    padding: 10px
+}
+
+.form-control:focus {
+    box-shadow: none !important;
+    border: 1px solid #2ECC71  !important
+}
+a{
+    text-decoration: none !important
+}
+
+.btn:active{
+    box-shadow: none !important;
+}
+
+.btn:focus {
+    box-shadow: none !important;
+}
+
+
+
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    clear: both;
+    max-width: 70%;
+}
+
+.right {
+    float: right;
+    background-color: #DCF8C6;
+    color: white;
+    background: #2ECC71;
+    border-radius: 10px 0px 10px 10px
+}
+
+.left {
+    float: left;
+    background-color: #E5E5EA;
+    color: white;
+    background: grey;
+    border-radius: 0px 10px 10px 10px
+}

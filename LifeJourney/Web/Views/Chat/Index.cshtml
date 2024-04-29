@@ -1,0 +1,98 @@
+﻿@model IEnumerable<BL.DTOs.GetMessageDTO>
+@inject StateHelper _stateHelper
+@{
+    ViewData["Title"] = "Chat";
+}
+<link href="~/css/toastify.css" rel="stylesheet" />
+<div class="main-box">
+    <div class="box" id="chat-box">
+        <div class="text-center">
+            <span class="badge text-bg-primary">Conversation starts from here</span>
+        </div>
+        @{
+            foreach (var message in Model)
+            {
+                if (message.IsBot)
+                {
+                    <div class="mx-2 message left">
+                        <p><strong>Bot</strong> - @message.CreatedOn.ToString("dd MMM, yyyy hh:mm tt")</p>
+                        <p>@message.Text</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="mx-2 message right">
+                        <p><strong>@message.Username</strong> - @message.CreatedOn.ToString("dd MMM, yyyy hh:mm tt")</p>
+                        <p>@message.Text</p>
+                    </div>
+                }
+            }
+        }
+    </div>
+
+    <div class="mx-auto col-md-12 mx-5 my-2 input-container">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="message" placeholder="Send a message">
+            <span class="input-group-text" id="sendmessage" style="background: #2ECC71">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-send" viewBox="0 0 16 16">
+                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+                </svg>
+            </span>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/lib/signalr.min.js"></script>
+    <script type="text/javascript" src="~/js/toastify.js"></script>
+    <script type="text/javascript" src="~/js/chat.js"></script>
+    <script>
+
+        window.onload = function () {
+            toBottom()
+        };
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var messageInput = document.getElementById('message');
+            messageInput.focus();
+
+            var connection = new signalR.HubConnectionBuilder()
+                .withUrl('/chatHub')
+                .build();
+
+            connection.on('unicast', function (message) {
+                reply(message)
+            });
+
+            connection.onclose(function (error) {
+                console.log('Connection closed. Attempting to reconnect...');
+                startConnection();
+            });
+
+            function startConnection() {
+                connection.start()
+                    .then(function () {
+                        console.log('connection started');
+                        document.getElementById('sendmessage').addEventListener('click', function (event) {
+                            connection.invoke('SendPrivate', @_stateHelper.GetUserData().Id, messageInput.value);
+                            messageInput.value = '';
+                            messageInput.focus();
+                            event.preventDefault();
+                        });
+                        document.getElementById('message').addEventListener('change', function (event) {
+                            connection.invoke('SendPrivate', @_stateHelper.GetUserData().Id, messageInput.value);
+                            messageInput.value = '';
+                            messageInput.focus();
+                            event.preventDefault();
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error starting connection: ' + error);
+                        setTimeout(startConnection, 5000);
+                    });
+            }
+
+            startConnection();
+        });
+    </script>
+}
